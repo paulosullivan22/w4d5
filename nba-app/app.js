@@ -53,6 +53,20 @@ const players = [
     team: "LAK",
     photo:
       "https://clutchpoints.com/wp-content/uploads/2017/10/Kobe-Bryant-e1508564618882.jpg"
+  },
+  {
+    name: "Kobe",
+    lastName: "Bryant",
+    team: "LAK",
+    photo:
+      "https://clutchpoints.com/wp-content/uploads/2017/10/Kobe-Bryant-e1508564618882.jpg"
+  },
+  {
+    name: "Kobe",
+    lastName: "Bryant",
+    team: "LAK",
+    photo:
+      "https://clutchpoints.com/wp-content/uploads/2017/10/Kobe-Bryant-e1508564618882.jpg"
   }
 ];
 
@@ -64,14 +78,35 @@ app.get("/players", (req, res) => {
   res.render("players", { playersList: players });
 });
 
-app.get("/players/:lastName", (req, res) => {
-  console.log(req.params);
+app.get("/teams/:teamId/players/:playerId", (req, res) => {
+  const team = req.params.teamId;
+  const lastName = req.params.playerId;
 
+  const player = players.find(
+    el =>
+      el.lastName.toLowerCase() === lastName &&
+      el.team.toUpperCase() === team.toUpperCase()
+  );
+
+  res.render("player", { player });
+});
+
+app.get("/players/:lastName", (req, res) => {
   const lastName = req.params.lastName;
 
   const player = players.find(el => el.lastName.toLowerCase() === lastName);
 
   res.render("player", { player });
+});
+
+app.get("/search/", (req, res) => {
+  const q = req.query.q.toLowerCase();
+  console.log(req.query);
+  const playersList = players.filter(player =>
+    player.lastName.toLowerCase().includes(q)
+  );
+
+  res.render("players", { playersList });
 });
 
 /*
